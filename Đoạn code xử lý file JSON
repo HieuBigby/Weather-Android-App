@@ -1,0 +1,36 @@
+            public void onResponse(String response) {
+            //                Log.d("response", response);
+                String output = "";
+                try {
+                    JSONObject jsonResponse = new JSONObject(response);
+
+                    JSONArray jsonArray = jsonResponse.getJSONArray("weather");
+                    JSONObject jsonObjectWeather = jsonArray.getJSONObject(0);
+
+                    JSONObject jsonObjectMain = jsonResponse.getJSONObject("main");
+                    double temp = jsonObjectMain.getDouble("temp") - 273.15;
+                    double feelsLike = jsonObjectMain.getDouble("feels_like") - 273.15;
+                    int pressure = jsonObjectMain.getInt("pressure");
+                    int humidity = jsonObjectMain.getInt("humidity");
+
+                    JSONObject jsonObjectWind = jsonResponse.getJSONObject("wind");
+                    String windSpeed = jsonObjectWind.getString("speed");
+
+                    JSONObject jsonObjectClouds = jsonResponse.getJSONObject("clouds");
+                    String clouds = jsonObjectClouds.getString("all");
+
+                    JSONObject jsonObjectSys = jsonResponse.getJSONObject("sys");
+                    String cityName = jsonResponse.getString("name");
+
+                    output += "Thời tiết của " + cityName + " hôm nay:"
+                            + "\n- Nhiệt độ: " + df.format(temp) + "°C"
+                            + "\n- Cảm giác như: " + df.format(feelsLike) + "°C"
+                            + "\n- Độ ẩm: " + humidity + "%"
+                            + "\n- Tốc độ gió: " + windSpeed + " m/s"
+                            + "\n- Độ mây phủ: " + clouds + "%";
+
+                    resultTV.setText(output);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
